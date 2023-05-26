@@ -19,7 +19,7 @@ pip3 install -r requirements.txt
 
 ### 启动应用
 ```
-nohup python manage.py runserver 2>&1 &
+nohup python manage.py runserver 2>/tmp/flask_audio.log 1>&2 &
 或
 ./run_app_dev.py (仅限测试)
 ```
