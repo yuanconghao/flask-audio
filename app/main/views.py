@@ -223,8 +223,9 @@ def audio_translate():
     files = [
         ('file', (file_name, open(file_path, 'rb'), 'audio/wav'))
     ]
+
     headers = {
-        'Authorization': 'Bearer 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'
+        'Authorization': 'Bearer ' + c.OPENAI_API_KEY
     }
 
     response = requests.request("POST", url, headers=headers, data=payload, files=files)

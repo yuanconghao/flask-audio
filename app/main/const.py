@@ -1,3 +1,7 @@
+import os
+
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
 AUDIO_BASE_PATH = '/data/audio-core/'
 #AUDIO_BASE_PATH = '/Users/conghaoyuan/data/audio-core/'
 AUDIO_WAV_PATH = AUDIO_BASE_PATH + 'audio/'
