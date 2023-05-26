@@ -231,6 +231,12 @@ def audio_translate():
 
     print(response.text)
     text = json.loads(response.text)
+        if text['error']:
+        res['code'] = 10003
+        res['msg'] = text['error']['code']
+        return res
+
+    print(response.text)
     data = {
         "text": zhconv.convert(text['text'], 'zh-hans')
     }
