@@ -231,7 +231,7 @@ def audio_translate():
 
     print(response.text)
     text = json.loads(response.text)
-        if text['error']:
+    if text['error']:
         res['code'] = 10003
         res['msg'] = text['error']['code']
         return res
