@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}语音转文字[中文]{% endblock %}
+
+
+{% block navbar %}
+<section class="content-header">
+    <h1>语音转文字[中文]</h1>
+    <ol class="breadcrumb">
+        <li><i class="fa fa-dashboard"></i> 当前位置</li>
+        <li class="active">语音</li>
+        <li class="active">语音转文字[中文]</li>
+    </ol>
+</section>
+{% endblock %}
+
+
+{% block content %}
+<div class="box box-primary">
+    <form>
+        {{form.hidden_tag()}}
+        <div class="box-header with-border">
+            {% include 'message.html' %}
+        </div>
+
+        <div class="box-body">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="ui form">
+                        <div class="inline fields">
+                            <label><font color="#778899" size="4">上传语音文件</font>&nbsp;&nbsp;&nbsp;&nbsp;<font
+                                    color="#ff0000">注:目前仅支持.wav格式</font></label>
+                        </div>
+                        <div class="inline fields">
+                            <div class="column dm-uploader" id="audio_upload">
+                                <div class="form-group">
+                                    <div role="button" class="btn btn-primary mr-2">
+                                        <i class="fa fa-fw fa-folder-o"></i> Browse Files
+                                        <!--                                        <input type="file" title="Click to add Files">-->
+                                        <input accept=".wav" type="file" name="up_audio" title="Click to add Files">
+
+                                    </div>
+                                    <small class="upload_status text-success"> </small>
+                                    <p id="upload_path" hidden></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box-footer">
+            <div class="col-md-12">
+                <div class="ui primary button pull-right translate_res" id="audio_translate">翻译</div>
+<!--                <div class="btn btn-primary pull-right translate_res" id="audio_translate">翻译</div>-->
+            </div>
+            <div class="col-md-12">
+                <label ><font color="#ff0000">
+                    <a class="download_url" href="#" target="_blank"></a>
+                </font></label>
+            </div>
+        </div>
+    </form>
+    <p></p>
+    <div class="ui message" id="container" style="width: 100%;height: auto;word-wrap:break-word;word-break:break-all;"></div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function initPage() {
+        $('#audio_upload').dmUploader({ //
+            url: '/audio_upload',
+            maxFileSize: 20000000, // 10M
+            multiple: false,
+            method: "post",
+            extraData: {
+                type: "audio",
+            },
+            fieldName: "file",
+            onInit: function () {
+                // Plugin is ready to use
+                console.log('Penguin initialized :)');
+            },
+            onComplete: function () {
+                // All files in the queue are processed (success or error)
+                console.log('All pending tranfers finished');
+            },
+            onNewFile: function (id, file) {
+                // When a new file is added using the file selector or the DnD area
+                console.log('New file added #' + id);
+
+            },
+            onBeforeUpload: function (id) {
+                // about tho start uploading a file
+                console.log('Starting the upload of #' + id);
+
+            },
+            onUploadCanceled: function (id) {
+                // Happens when a file is directly canceled by the user.
+
+            },
+            onUploadProgress: function (id, percent) {
+                // Updating file progress
+
+            },
+            onUploadSuccess: function (id, data) {
+                console.log(data)
+                // A file was successfully uploaded
+                console.log('Server Response for file #' + id + ': ' + JSON.stringify(data));
+                console.log('Upload of file #' + id + ' COMPLETED');
+                console.log(data.code)
+                console.log(data.data)
+                console.log(data.data.path)
+                if (data.code != 0) {
+                    $(".upload_status").text("上传失败:" + data.msg);
+                    $(".message").transition('fade');
+                    return false;
+                }
+                $(".upload_status").text("上传成功:" + data.data.path);
+                $("#upload_path").text(data.data.path);
+            },
+            onUploadError: function (id, xhr, status, message) {
+                $(".upload_status").text("上传失败:" + message);
+                $(".message").transition('fade');
+            },
+            onFallbackMode: function () {
+                // When the browser doesn't support this plugin :(
+                console.log('Plugin cant be used here, running Fallback callback');
+                $(".upload_status").text('浏览器不支持上传插件，请联系管理员');
+                $(".message").transition('fade');
+            },
+            onFileSizeError: function (file) {
+                console.log('File \'' + file.name + '\' cannot be added: size excess limit');
+                $(".upload_status").text('文件超过限制，最大5M');
+                $(".message").transition('fade');
+            },
+        });
+
+        $("#audio_translate").click(function() {
+            var path = $("#upload_path").text()
+            var lang = 'zh'
+            if (path === '') {
+                alert("请先上传文件")
+                return;
+            }
+            console.log(path)
+            $(".translate_res").addClass("loading")
+            $.post('/audio_translate', {path:path,lang:lang}, function(data) {
+                console.log(data);
+                $(".translate_res").removeClass("loading")
+                if(data.code == '0') {
+                    var options = {
+                        dom : 'container' //对应容器的id
+                    };
+                    var jf = new JsonFormatter(options); //创建对象
+                    jf.doFormat(data.data); //格式化json
+                    // download_path = "/" + path + '.txt'
+                    // $(".download_url").attr("href", download_path)
+                    // $(".download_url").text(download_path)
+                }else {
+                    alert(data.msg);
+                }
+            }
+        );
+    });
+    }
+</script>
+{% endblock %}
