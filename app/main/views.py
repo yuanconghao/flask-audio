@@ -228,6 +228,8 @@ def audio_translate():
         'Authorization': 'Bearer ' + c.OPENAI_API_KEY
     }
 
+    print(headers)
+
     response = requests.request("POST", url, headers=headers, data=payload, files=files)
 
     print(response.text)
