@@ -223,9 +223,12 @@ def audio_translate():
     files = [
         ('file', (file_name, open(file_path, 'rb'), 'audio/wav'))
     ]
+
     headers = {
-        'Authorization': 'Bearer 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'
+        'Authorization': 'Bearer ' + c.OPENAI_API_KEY
     }
+
+    print(headers)
 
     response = requests.request("POST", url, headers=headers, data=payload, files=files)
 
@@ -266,7 +269,7 @@ def audio_translate_c():
 
     print(file_path)
     if model is None:
-        model = 'base'
+        model = 'small'
     if model not in ['base', 'small', 'medium']:
         res['code'] = 10003
         res['msg'] = 'model must in base/small/medium'
@@ -280,7 +283,7 @@ def audio_translate_c():
         return res
 
     # /Users/conghaoyuan/cpp/whisper.cpp/main -m /Users/conghaoyuan/cpp/whisper.cpp/models/ggml-base.bin -l zh -t 2 -f /Users/conghaoyuan/data/audio-core/data/jfk.wav -otxt --prompt '简体中文'
-    cmd = f"{c.WHISPER_PATH}main -m {c.WHISPER_MODEL_PATH}{c.WHISPER_MODEL_MAP[model]} -l {lang} -t 2 -f {file_path} -otxt"
+    cmd = f"{c.WHISPER_PATH}main -m {c.WHISPER_MODEL_PATH}{c.WHISPER_MODEL_MAP[model]} -l {lang} -t 2 -p 2 -f {file_path} -otxt"
     if lang == 'zh':
         cmd += " --prompt '简体中文'"
     print(cmd)
