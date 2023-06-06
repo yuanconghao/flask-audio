@@ -148,7 +148,7 @@
             }
             console.log(path)
             $(".translate_res").addClass("loading")
-            $.post('/audio_translate_c', {path:path,lang:lang}, function(data) {
+            $.post('/audio_translate', {path:path,lang:lang}, function(data) {
                 console.log(data);
                 $(".translate_res").removeClass("loading")
                 if(data.code == '0') {
