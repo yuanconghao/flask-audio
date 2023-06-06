@@ -235,7 +235,6 @@ def audio_translate():
     #     res['code'] = 10003
     #     res['msg'] = text['error']['code']
     #     return res
-
     data = {
         "text": zhconv.convert(text['text'], 'zh-hans')
     }
