@@ -213,11 +213,11 @@ def audio_translate():
         return res
 
     print(file_path)
-    # ffmpeg
-    cmd = f"ffmpeg -i {file_path} -vn -b:a 192k -ar 44100 -ac 2 -acodec libmp3lame -y {file_path}"
-    print(cmd)
-    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-    print(result)
+    # # ffmpeg
+    # cmd = f"ffmpeg -i {file_path} -vn -b:a 192k -ar 44100 -ac 2 -acodec libmp3lame -y {file_path}"
+    # print(cmd)
+    # result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    # print(result)
 
     url = "https://api.openai.com/v1/audio/transcriptions"
 
