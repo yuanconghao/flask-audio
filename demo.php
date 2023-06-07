@@ -11,9 +11,9 @@ curl_setopt_array($curl, array(
   CURLOPT_FOLLOWLOCATION => true,
   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
   CURLOPT_CUSTOMREQUEST => 'POST',
-  CURLOPT_POSTFIELDS => array('file'=> new CURLFILE('/home/work/data/voice/168.wav'),'model' => 'whisper-1','language' => 'zh'),
+  CURLOPT_POSTFIELDS => array('file'=> new CURLFILE('/data/audio-core/data/Bayan课后.wav'),'model' => 'whisper-1','language' => 'zh'),
   CURLOPT_HTTPHEADER => array(
-    'Authorization: Bearer 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'
+    'Authorization: Bearer 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'
   ),
 ));
 
@@ -21,4 +21,3 @@ $response = curl_exec($curl);
 
 curl_close($curl);
 echo $response;
-
