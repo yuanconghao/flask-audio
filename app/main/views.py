@@ -179,6 +179,12 @@ def audio_upload():
 
     f.close()
 
+    # ffmpeg
+    cmd = f"ffmpeg -i {upload_file_path} -ar 16000 -ac 1 -c:a pcm_s16le {upload_file_path}"
+    print(cmd)
+    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    print(result)
+
     data = {
         'file_name': file_name,
         'path': relative_path
